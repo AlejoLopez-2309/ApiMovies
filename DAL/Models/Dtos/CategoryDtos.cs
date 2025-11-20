@@ -2,7 +2,7 @@
 
 namespace ApiMovies.DAL.Models.Dtos
 {
-    public class CategoryDto
+    public class CategoryDtos
     {
         public int Id { get; set; }
 

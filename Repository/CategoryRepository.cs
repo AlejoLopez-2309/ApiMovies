@@ -28,7 +28,7 @@ namespace ApiMovies.Repository
               .AnyAsync(c => c.Name == name);
         }
 
-        public async Task<bool> CreateCategoryAsync(Category category)
+        public async Task<bool> CreateCategoryAsync(CategoryDto category)
         {
             category.CreatedDate = DateTime.UtcNow;
 
@@ -48,17 +48,18 @@ namespace ApiMovies.Repository
             return await SaveAsync();
         }
 
-        public async Task<ICollection<Category>> GetCategoriesAsync()
+        public async Task<ICollection<CategoryDto>> GetCategoriesAsync()
         {
-            return await _context.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync();
+            var categories = await _context.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync();
+            return categories;
         }
 
-        public async Task<Category> GetCategoryAsync(int Id) //Async y el await
+        public async Task<CategoryDto> GetCategoryAsync(int Id) //Async y el await
         {
             return await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == Id);
         }
 
-        public async Task<bool> UpdateCategoryAsync(Category category)
+        public async Task<bool> UpdateCategoryAsync(CategoryDto category)
         {
             category.ModifiedDate = DateTime.UtcNow;
 

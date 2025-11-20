@@ -2,7 +2,7 @@
 
 namespace ApiMovies.DAL.Models
 {
-    public class Category : AuditBase
+    public class CategoryDto : AuditBase
     {
         [Required]
         public string Name { get; set; }

@@ -9,6 +9,6 @@ namespace ApiMovies.DAL
         {
         }
 
-        public DbSet<Models.Category> Categories { get; set; }
+        public DbSet<Models.CategoryDto> Categories { get; set; }
     }
 }
