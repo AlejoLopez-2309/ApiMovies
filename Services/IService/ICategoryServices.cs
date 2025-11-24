@@ -1,4 +1,5 @@
-﻿using ApiMovies.DAL.Models.Dtos;
+﻿using ApiMovies.DAL.Models;
+using ApiMovies.DAL.Models.Dtos;
 
 namespace ApiMovies.Services.IService
 {
@@ -8,13 +9,13 @@ namespace ApiMovies.Services.IService
 
         Task<CategoryDtos> GetCategoryAsync(int Id);
 
-        Task<bool> CategoryExistsAsync(int Id);
+        Task<CategoryDtos> CreateCategoryAsync(CategoryCreateUpdateDtos categoryDtos);
+
+        Task<CategoryDtos> UpdateCategoryAsync(CategoryCreateUpdateDtos dtos, int id);
+
+        Task<bool> CategoryExistsByIdAsync(int Id);
 
         Task<bool> CategoryExistsByNameAsync(string name);
-
-        Task<bool> CreateCategoryAsync(CategoryCreateDtos categoryCreateDtos);
-
-        Task<bool> UpdateCategoryAsync(int Id, CategoryCreateDtos categoryCreateDtos);
 
         Task<bool> DeleteCategoryAsync(int Id);
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApiMovies.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiMovies.DAL
 {
@@ -9,6 +10,6 @@ namespace ApiMovies.DAL
         {
         }
 
-        public DbSet<Models.CategoryDto> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
