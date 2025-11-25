@@ -11,7 +11,7 @@ namespace ApiMovies.Services.IService
 
         Task<CategoryDtos> CreateCategoryAsync(CategoryCreateUpdateDtos categoryDtos);
 
-        Task<CategoryDtos> UpdateCategoryAsync(CategoryCreateUpdateDtos dtos, int id);
+        Task<CategoryDtos> UpdateCategoryAsync(CategoryCreateUpdateDtos dto, int id);
 
         Task<bool> CategoryExistsByIdAsync(int Id);
 

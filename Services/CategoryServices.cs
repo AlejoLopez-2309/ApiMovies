@@ -54,9 +54,24 @@ namespace ApiMovies.Services
             return _mapper.Map<CategoryDtos>(category);
         }
 
-        public Task<bool> DeleteCategoryAsync(int Id)
+        public async Task<bool> DeleteCategoryAsync(int Id)
         {
-            throw new NotImplementedException();
+            //verificar si la categoria existe
+
+            var categoryExists = await _categoryRepository.GetCategoryAsync(Id);
+
+            if (categoryExists == null)
+            {
+                throw new InvalidOperationException($"No se encontro la categoría con ID: '{Id}'");
+            }
+
+            var categoryDeleted = await _categoryRepository.DeleteCategoryAsync(Id);
+
+            if (!categoryDeleted)
+            {
+                throw new Exception("No se pudo eliminar la categoría");
+            }
+            return categoryDeleted;
         }
 
         public async Task<ICollection<CategoryDtos>> GetCategoriesAsync()
@@ -77,9 +92,31 @@ namespace ApiMovies.Services
             return _mapper.Map<CategoryDtos>(category);
         }
 
-        public Task<CategoryDtos> UpdateCategoryAsync(CategoryCreateUpdateDtos dtos, int id)
+        public async Task<CategoryDtos> UpdateCategoryAsync(CategoryCreateUpdateDtos dtos, int id)
         {
-            throw new NotImplementedException();
+            var categoryExists = await _categoryRepository.GetCategoryAsync(id);
+            if (categoryExists == null)
+            {
+                throw new InvalidOperationException($"No se encontro la categoría con ID: '{id}'");
+            }
+
+            var nameExits = await _categoryRepository.CategoryExistsByNameAsync(dtos.Name);
+            if (nameExits)
+            {
+                throw new InvalidOperationException($"Ya existe la categoría con el nombre de: '{dtos.Name}'");
+            }
+
+            //Mapeo de DTO a entidad
+
+            _mapper.Map(dtos, categoryExists);
+
+            var categoryUpdated = await _categoryRepository.UpdateCategoryAsync(categoryExists);
+
+            if (!categoryUpdated)
+            {
+                throw new Exception("No se pudo actualizar la categoría");
+            }
+            return _mapper.Map<CategoryDtos>(categoryExists);
         }
 
         private async Task<Category> GetCategoryByIdAsync(int id)
