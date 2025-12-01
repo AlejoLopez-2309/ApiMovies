@@ -19,6 +19,8 @@ builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 //Dependency Injection for repositories
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+builder.Services.AddScoped<IMovieServices, MovieServices>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

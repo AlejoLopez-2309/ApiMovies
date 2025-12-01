@@ -1,4 +1,5 @@
-﻿using ApiMovies.DAL.Models;
+﻿using ApiMovies.DAL.Dtos;
+using ApiMovies.DAL.Models;
 using ApiMovies.DAL.Models.Dtos;
 using AutoMapper;
 
@@ -11,6 +12,8 @@ namespace ApiMovies.MoviesMapper
             //Category
             CreateMap<Category, CategoryDtos>().ReverseMap();
             CreateMap<Category, CategoryCreateUpdateDtos>().ReverseMap();
+            CreateMap<Movie, MovieDtos>().ReverseMap();
+            CreateMap<Movie, MovieCreateUpdateDtos>().ReverseMap();
         }
     }
 }

@@ -14,9 +14,12 @@ namespace ApiMovies.Repository
             _context = context;
         }
 
-        public Task<bool> CreateMovieAsync(Movie movie)
+        public async Task<bool> CreateMovieAsync(Movie movie)
         {
-            throw new NotImplementedException();
+            movie.CreatedDate = DateTime.UtcNow;
+
+            await _context.Movies.AddAsync(movie);
+            return await SaveAsync();
         }
 
         public Task<bool> DeleteMovieAsync(int Id)
@@ -24,9 +27,9 @@ namespace ApiMovies.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Movie> GetMovieAsync(int Id)
+        public async Task<Movie> GetMovieAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await _context.Movies.AsNoTracking().FirstOrDefaultAsync(c => c.Id == Id);
         }
 
         public async Task<ICollection<Movie>> GetMoviesAsync()
@@ -35,19 +38,28 @@ namespace ApiMovies.Repository
             return movie;
         }
 
-        public Task<bool> MovieExistsAsync(int Id)
+        public async Task<bool> MovieExistsAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await _context.Movies
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == Id);
         }
 
-        public Task<bool> MovieExistsByNameAsync(string name)
+        public async Task<bool> MovieExistsByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await _context.Movies
+              .AsNoTracking()
+              .AnyAsync(c => c.Name == name);
         }
 
         public Task<bool> UpdateMovieAsync(Movie movie)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() >= 0 ? true : false;
         }
     }
 }

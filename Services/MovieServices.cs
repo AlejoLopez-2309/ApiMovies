@@ -1,4 +1,5 @@
 ﻿using ApiMovies.DAL.Dtos;
+using ApiMovies.DAL.Models;
 using ApiMovies.DAL.Models.Dtos;
 using ApiMovies.Repository;
 using ApiMovies.Repository.IRepository;
@@ -18,14 +19,31 @@ namespace ApiMovies.Services
             _mapper = mapper;
         }
 
-        public Task<MovieDtos> CreateMovieAsync(MovieCreateUpdateDtos movieDtos)
+        public async Task<MovieDtos> CreateMovieAsync(MovieCreateUpdateDtos movieCreateDtos)
         {
-            throw new NotImplementedException();
+            var movieExists = await _movieRepository.MovieExistsByNameAsync(movieCreateDtos.Name);
+            if (movieExists)
+            {
+                throw new InvalidOperationException($"Ya existe una pelicula con el nombre de: '{movieCreateDtos.Name}'");
+            }
+
+            var movie = _mapper.Map<Movie>(movieCreateDtos);
+
+            var movieCreated = await _movieRepository.CreateMovieAsync(movie);
+
+            if (!movieCreated)
+            {
+                throw new Exception("No se pudo crear la pelicula");
+            }
+
+            return _mapper.Map<MovieDtos>(movie);
         }
 
-        public Task<MovieDtos> GetMovieAsync(int Id)
+        public async Task<MovieDtos> GetMovieAsync(int Id)
         {
-            throw new NotImplementedException();
+            var movie = await GetMoviesByIdAsync(Id);
+
+            return _mapper.Map<MovieDtos>(movie);
         }
 
         public async Task<ICollection<MovieDtos>> GetMoviesAsync()
@@ -35,14 +53,21 @@ namespace ApiMovies.Services
             return _mapper.Map<ICollection<MovieDtos>>(movies);
         }
 
-        public async Task<bool> MovieCategoryAsync(int Id)
+        public async Task<bool> DeleteMovieAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> MovieExistsByIdAsync(int Id)
+        private async Task<Movie> GetMoviesByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var movie = await _movieRepository.GetMovieAsync(id);
+
+            if (movie == null)
+            {
+                throw new InvalidOperationException($"No se encontró la categoría con ID: '{id}'");
+            }
+
+            return movie;
         }
 
         public Task<bool> MovieExistsByNameAsync(string name)
@@ -51,6 +76,11 @@ namespace ApiMovies.Services
         }
 
         public Task<MovieDtos> UpdateMovieAsync(MovieCreateUpdateDtos dto, int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IMovieServices.MovieExistsByIdAsync(int Id)
         {
             throw new NotImplementedException();
         }

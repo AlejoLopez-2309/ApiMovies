@@ -54,7 +54,7 @@ namespace ApiMovies.Repository
             return categories;
         }
 
-        public async Task<Category> GetCategoryAsync(int Id) //Async y el await
+        public async Task<Category> GetCategoryAsync(int Id)
         {
             return await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == Id);
         }

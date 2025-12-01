@@ -17,6 +17,6 @@ namespace ApiMovies.Services.IService
 
         Task<bool> MovieExistsByNameAsync(string name);
 
-        Task<bool> MovieCategoryAsync(int Id);
+        Task<bool> DeleteMovieAsync(int Id);
     }
 }
