@@ -55,7 +55,20 @@ namespace ApiMovies.Services
 
         public async Task<bool> DeleteMovieAsync(int Id)
         {
-            throw new NotImplementedException();
+            var movieExists = await _movieRepository.GetMovieAsync(Id);
+
+            if (movieExists == null)
+            {
+                throw new InvalidOperationException($"No se encontro la pelicula con ID: '{Id}'");
+            }
+
+            var movieDeleted = await _movieRepository.DeleteMovieAsync(Id);
+
+            if (!movieDeleted)
+            {
+                throw new Exception("No se pudo eliminar la pelicula");
+            }
+            return movieDeleted;
         }
 
         private async Task<Movie> GetMoviesByIdAsync(int id)
@@ -75,9 +88,29 @@ namespace ApiMovies.Services
             throw new NotImplementedException();
         }
 
-        public Task<MovieDtos> UpdateMovieAsync(MovieCreateUpdateDtos dto, int id)
+        public async Task<MovieDtos> UpdateMovieAsync(MovieCreateUpdateDtos dto, int id)
         {
-            throw new NotImplementedException();
+            var movieExists = await _movieRepository.GetMovieAsync(id);
+            if (movieExists == null)
+            {
+                throw new InvalidOperationException($"No se encontro la pelicula con ID: '{id}'");
+            }
+
+            var nameExits = await _movieRepository.MovieExistsByNameAsync(dto.Name);
+            if (nameExits)
+            {
+                throw new InvalidOperationException($"Ya existe la pelicula con el nombre de: '{dto.Name}'");
+            }
+
+            _mapper.Map(dto, movieExists);
+
+            var movieUpdated = await _movieRepository.UpdateMovieAsync(movieExists);
+
+            if (!movieUpdated)
+            {
+                throw new Exception("No se pudo actualizar la pelicula");
+            }
+            return _mapper.Map<MovieDtos>(movieExists);
         }
 
         Task<bool> IMovieServices.MovieExistsByIdAsync(int Id)

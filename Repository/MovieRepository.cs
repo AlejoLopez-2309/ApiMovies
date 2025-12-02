@@ -22,9 +22,16 @@ namespace ApiMovies.Repository
             return await SaveAsync();
         }
 
-        public Task<bool> DeleteMovieAsync(int Id)
+        public async Task<bool> DeleteMovieAsync(int Id)
         {
-            throw new NotImplementedException();
+            var movie = await GetMovieAsync(Id);
+            if (movie == null)
+            {
+                return false;
+            }
+
+            _context.Movies.Remove(movie);
+            return await SaveAsync();
         }
 
         public async Task<Movie> GetMovieAsync(int Id)
@@ -52,9 +59,12 @@ namespace ApiMovies.Repository
               .AnyAsync(c => c.Name == name);
         }
 
-        public Task<bool> UpdateMovieAsync(Movie movie)
+        public async Task<bool> UpdateMovieAsync(Movie movie)
         {
-            throw new NotImplementedException();
+            movie.ModifiedDate = DateTime.UtcNow;
+
+            _context.Movies.Update(movie);
+            return await SaveAsync();
         }
 
         private async Task<bool> SaveAsync()
